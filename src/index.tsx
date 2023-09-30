@@ -1,46 +1,39 @@
 /** @jsx jsx */
-import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { jsx } from 'hono/jsx'
-import { basicAuth } from 'hono/basic-auth'
+import { serve } from '@hono/node-server'
+import dotenv from 'dotenv'
+import pkg from '../package.json'
+import { convertToPo } from './utils'
+import { querySchema } from './schema'
+
+const env = dotenv.config()
+
+const SHEET_ID = env.parsed?.SHEET_ID
 
 const app = new Hono()
 
-app.get('/', (c) => c.text('Hello Hono!'))
+app.get('/', (c) => c.json(pkg))
 
-app.get('/api/hello', (c) => {
-  return c.json({
-    ok: true,
-    message: 'Hello Hono!',
-  })
-})
+app.get('/api/i18n', async (c) => {
+  const {
+    name = 'dashboard',
+    lang = 'ko',
+    format = 'json',
+  } = querySchema.parse(c.req.query())
 
-app
-  .get('/posts/:id', (c) => {
-    const page = c.req.query('page')
-    const id = c.req.param('id')
+  const url = new URL(`https://script.google.com/macros/s/${SHEET_ID}/exec`)
+  url.searchParams.append('name', name)
+  url.searchParams.append('lang', lang)
 
-    c.header('X-Message', 'Hi!')
+  const data = await fetch(url.toString()).then((r) => r.json())
 
-    return c.text(`You want see ${page} of ${id}`)
-  })
-  .post('/posts', (c) => c.text('Created!', 201))
-  .delete('/posts/:id', (c) => c.text(`${c.req.param('id')} is deleted!`))
+  if (format === 'po') {
+    const po = convertToPo({ data, lang })
 
-app.get('/page', (c) => {
-  return c.html(<h1>Hello Hono!</h1>)
-})
+    return c.text(po)
+  }
 
-app.use(
-  '/admin/*',
-  basicAuth({
-    username: 'admin',
-    password: 'secret',
-  })
-)
-
-app.get('/admin', (c) => {
-  return c.text('Your are authorized!')
+  return c.json(data)
 })
 
 serve(app)
