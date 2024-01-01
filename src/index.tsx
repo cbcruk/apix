@@ -1,39 +1,11 @@
-/** @jsx jsx */
 import { Hono } from 'hono'
 import { serve } from '@hono/node-server'
-import dotenv from 'dotenv'
-import pkg from '../package.json'
-import { convertToPo } from './utils'
-import { querySchema } from './schema'
+import { i18n } from './api/i18n'
+import { auth } from './auth'
 
-const env = dotenv.config()
+export const app = new Hono()
 
-const SHEET_ID = env.parsed?.SHEET_ID
-
-const app = new Hono()
-
-app.get('/', (c) => c.json(pkg))
-
-app.get('/api/i18n', async (c) => {
-  const {
-    name = 'dashboard',
-    lang = 'ko',
-    format = 'json',
-  } = querySchema.parse(c.req.query())
-
-  const url = new URL(`https://script.google.com/macros/s/${SHEET_ID}/exec`)
-  url.searchParams.append('name', name)
-  url.searchParams.append('lang', lang)
-
-  const data = await fetch(url.toString()).then((r) => r.json())
-
-  if (format === 'po') {
-    const po = convertToPo({ data, lang })
-
-    return c.text(po)
-  }
-
-  return c.json(data)
-})
+app.route('/auth', auth)
+app.route('/api/i18n', i18n)
 
 serve(app)

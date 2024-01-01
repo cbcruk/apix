@@ -9,6 +9,6 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "tsx": "^3.12.2"
+    "tsx": "latest"
   }
 }
