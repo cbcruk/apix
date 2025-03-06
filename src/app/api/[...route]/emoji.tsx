@@ -27,7 +27,7 @@ emoji.get('/svg', (c) => {
 emoji.get('/', (c) => {
   return c.html(
     <i>
-      <img src="http://localhost:3000/emoji/svg" alt="" />
+      <img src="http://localhost:3000/api/emoji/svg" alt="" />
     </i>
   )
 })

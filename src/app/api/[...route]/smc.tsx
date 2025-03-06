@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import smcat from 'state-machine-cat'
+import { render } from 'state-machine-cat'
 
 export const smc = new Hono()
 
@@ -42,19 +42,17 @@ smc.get('/svg', (c) => {
   c.header('Content-Type', 'image/svg+xml')
   c.header('Cache-Control', 's-maxage=1')
 
-  const result = smcat.render(input, {
+  const result = render(input, {
     outputType: 'svg',
   })
 
-  return c.body(
-    result
-  )
+  return c.body(result)
 })
 
 smc.get('/', (c) => {
   return c.html(
     <i>
-      <img src="http://localhost:3000/smc/svg" alt="" />
+      <img src="http://localhost:3000/api/smc/svg" alt="" />
     </i>
   )
 })

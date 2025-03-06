@@ -1,6 +1,7 @@
+# apix
+
 ```
-npm install
-npm run start
+pnpm dev
 ```
 
 ```
