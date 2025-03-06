@@ -1,3 +1,4 @@
+/** @jsxImportSource hono/jsx */
 import { Hono } from 'hono'
 
 export const emoji = new Hono()
@@ -25,9 +26,11 @@ emoji.get('/svg', (c) => {
 })
 
 emoji.get('/', (c) => {
+  const url = new URL(c.req.url)
+
   return c.html(
     <i>
-      <img src="http://localhost:3000/api/emoji/svg" alt="" />
+      <img src={`${url.origin}/api/emoji/svg`} alt="" />
     </i>
   )
 })

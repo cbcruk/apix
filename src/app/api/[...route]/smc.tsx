@@ -1,3 +1,4 @@
+/** @jsxImportSource hono/jsx */
 import { Hono } from 'hono'
 import { render } from 'state-machine-cat'
 
@@ -50,9 +51,11 @@ smc.get('/svg', (c) => {
 })
 
 smc.get('/', (c) => {
+  const url = new URL(c.req.url)
+
   return c.html(
     <i>
-      <img src="http://localhost:3000/api/smc/svg" alt="" />
+      <img src={`${url.origin}/api/smc/svg`} alt="" />
     </i>
   )
 })
