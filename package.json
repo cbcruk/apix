@@ -7,6 +7,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.2.0",
     "date-fns": "^4.1.0",
     "hono": "latest",
     "next": "15.2.1",
