@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "@date-fns/tz": "^1.2.0",
+    "@spotify/web-api-ts-sdk": "^1.2.0",
     "date-fns": "^4.1.0",
     "hono": "latest",
     "next": "15.2.1",
+    "satori": "^0.12.1",
     "state-machine-cat": "^12.0.21",
     "zod": "^3.22.2"
   },
