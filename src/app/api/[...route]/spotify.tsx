@@ -1,4 +1,4 @@
-import { basic, getCurrentTrack } from '@/lib/spotify/utils'
+import { basic, getCurrentTrack, getRecentlyPlayed } from '@/lib/spotify/utils'
 import { Hono } from 'hono'
 import satori from 'satori'
 
@@ -40,14 +40,14 @@ spotify.get('/auth', async (c) => {
 })
 
 spotify.get('/playing', async (c) => {
-  const track = await getCurrentTrack()
+  const track = await getRecentlyPlayed()
 
   if (!track) {
     return c.html(`NULL`)
   }
 
   const width = 240
-  const height = 52
+  const height = 60
 
   const cover = track.album.images[0].url
   const name = track.name
@@ -58,15 +58,23 @@ spotify.get('/playing', async (c) => {
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 6,
-        backgroundColor: '#333',
-        padding: 5,
-        borderRadius: 6,
+        gap: 8,
+        backgroundColor: '#1c1b1a',
+        padding: 8,
+        borderRadius: 8,
         width,
         overflow: 'hidden',
       }}
     >
-      <img src={cover} alt="" width={42} height={42} />
+      <img
+        src={cover}
+        alt=""
+        width={42}
+        height={42}
+        style={{
+          borderRadius: 6,
+        }}
+      />
       <div
         style={{
           display: 'flex',
