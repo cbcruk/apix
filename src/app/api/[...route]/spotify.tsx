@@ -128,5 +128,7 @@ spotify.get('/playing', async (c) => {
     }
   )
 
-  return c.html(svg)
+  c.header('Content-Type', 'image/svg+xml')
+
+  return c.body(svg)
 })
